@@ -1,7 +1,7 @@
-#ifndef GL_VERTEX_ARRAY_HPP
-#define GL_VERTEX_ARRAY_HPP
+#ifndef GLBASE_VERTEX_ARRAY_HPP
+#define GLBASE_VERTEX_ARRAY_HPP
 
-#include <GL/glew.h>
+#include <utility>
 
 namespace gl
 {
@@ -25,6 +25,33 @@ public:
 private:
 	GLuint m_handle;
 };
+
+inline vertex_array::vertex_array()
+{
+	glGenVertexArrays(1, &m_handle);
+}
+
+inline vertex_array::vertex_array(vertex_array&& other) noexcept :
+	m_handle(std::exchange(other.m_handle, (GLuint)0))
+{
+}
+
+inline vertex_array& vertex_array::operator=(vertex_array&& other) noexcept
+{
+	std::swap(m_handle, other.m_handle);
+
+	return *this;
+}
+
+inline vertex_array::~vertex_array()
+{
+	glDeleteVertexArrays(1, &m_handle);
+}
+
+inline void vertex_array::bind() const
+{
+	glBindVertexArray(m_handle);
+}
 
 inline GLuint vertex_array::handle() const
 {
