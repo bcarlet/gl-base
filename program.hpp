@@ -27,8 +27,6 @@ public:
 
 	void use() const;
 
-	GLint uniform_location(const GLchar* name) const;
-
 	GLuint handle() const;
 
 private:
@@ -99,11 +97,6 @@ inline void program::link(std::initializer_list<GLuint> shaders)
 inline void program::use() const
 {
 	glUseProgram(m_handle);
-}
-
-inline GLint program::uniform_location(const GLchar* name) const
-{
-	return glGetUniformLocation(m_handle, name);
 }
 
 inline GLuint program::handle() const
