@@ -50,15 +50,7 @@ inline shader::shader(GLenum shader_type) :
 inline shader::shader(const GLchar* source, GLint source_length, GLenum shader_type) :
 	shader(shader_type)
 {
-	try
-	{
-		compile(source, source_length);
-	}
-	catch (...)
-	{
-		glDeleteShader(m_handle);
-		throw;
-	}
+	compile(source, source_length);
 }
 
 inline shader& shader::operator=(shader&& other) noexcept

@@ -50,15 +50,7 @@ inline program::program(program&& other) noexcept :
 inline program::program(std::initializer_list<GLuint> shaders) :
 	program()
 {
-	try
-	{
-		link(shaders);
-	}
-	catch (...)
-	{
-		glDeleteProgram(m_handle);
-		throw;
-	}
+	link(shaders);
 }
 
 inline program& program::operator=(program&& other) noexcept
