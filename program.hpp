@@ -82,6 +82,7 @@ inline void program::link(std::initializer_list<GLuint> shaders)
 
 	if (status == GL_FALSE)
 	{
+#ifndef NDEBUG
 		GLint buffer_size;
 		glGetProgramiv(m_handle, GL_INFO_LOG_LENGTH, &buffer_size);
 
@@ -89,6 +90,7 @@ inline void program::link(std::initializer_list<GLuint> shaders)
 		glGetProgramInfoLog(m_handle, buffer_size, nullptr, info_log.get());
 
 		std::cerr << info_log.get() << '\n';
+#endif
 
 		throw std::runtime_error("Failed to link shader program.");
 	}
