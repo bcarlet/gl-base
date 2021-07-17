@@ -17,16 +17,25 @@ public:
 	explicit vertex_buffer(GLenum usage = GL_STATIC_DRAW);
 
 	// Create a new buffer with the given size and usage hint. If data is not
-	// NULL then it will be copied into the buffer's data store.
-	vertex_buffer(GLsizeiptr size, const void* data, GLenum usage);
+	// NULL, then it will be copied into the buffer's data store. This
+	// constructor binds the buffer.
+	vertex_buffer(GLsizeiptr size, const void* data, GLenum usage = GL_STATIC_DRAW);
 
 	vertex_buffer& operator=(const vertex_buffer&) = delete;
 	vertex_buffer& operator=(vertex_buffer&& other) noexcept;
 
 	void bind() const;
 
-	// Recreate the buffer's data store. The old store will be orphaned.
-	void update(GLsizeiptr size, const void* data);
+	// Create the buffer's data store. If data is not NULL, then it will be
+	// copied into the data store. The buffer must be bound before calling this
+	// function.
+	void create(GLsizeiptr size, const void* data = nullptr);
+
+	// Update a subset of the buffer's data store. The buffer must be bound
+	// before calling this function.
+	void update(GLintptr offset, GLsizeiptr size, const void* data);
+
+	GLenum usage() const;
 
 private:
 	GLenum m_usage;
@@ -63,11 +72,19 @@ inline void vertex_buffer::bind() const
 	glBindBuffer(GL_ARRAY_BUFFER, handle());
 }
 
-inline void vertex_buffer::update(GLsizeiptr size, const void* data)
+inline void vertex_buffer::create(GLsizeiptr size, const void* data)
 {
-	bind();
-	glBufferData(GL_ARRAY_BUFFER, size, nullptr, m_usage);	// orphan buffer
-	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	glBufferData(GL_ARRAY_BUFFER, size, data, m_usage);
+}
+
+inline void vertex_buffer::update(GLintptr offset, GLsizeiptr size, const void* data)
+{
+	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+}
+
+inline GLenum vertex_buffer::usage() const
+{
+	return m_usage;
 }
 
 }	// namespace gl

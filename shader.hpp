@@ -16,8 +16,8 @@ public:
 
 	explicit shader(GLenum shader_type);
 
-	// Compile a shader from source. If source_length is less than 0 then source
-	// is assumed to be null-terminated.
+	// Compile a shader from source. If source_length is less than 0, then
+	// source is assumed to be null-terminated.
 	shader(const GLchar* source, GLint source_length, GLenum shader_type);
 
 	shader& operator=(const shader&) = delete;
@@ -25,8 +25,8 @@ public:
 
 	~shader();
 
-	// Compile a shader from source. If source_length is less than 0 then source
-	// is assumed to be null-terminated.
+	// Compile a shader from source. If source_length is less than 0, then
+	// source is assumed to be null-terminated.
 	void compile(const GLchar* source, GLint source_length);
 
 	GLuint handle() const;
